@@ -1,0 +1,80 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hw6-ingress-auth
+  namespace: apps
+spec:
+  rules:
+    - host: arch.homework
+      http:
+        paths:
+          - path: /auth
+            pathType: Prefix
+            backend:
+              service:
+                name: user-service
+                port:
+                  number: 8000
+          - path: /login
+            pathType: Prefix
+            backend:
+              service:
+                name: user-service
+                port:
+                  number: 8000
+          - path: /logout
+            pathType: Prefix
+            backend:
+              service:
+                name: user-service
+                port:
+                  number: 8000
+          - path: /register
+            pathType: Prefix
+            backend:
+              service:
+                name: user-service
+                port:
+                  number: 8000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hw6-ingress-user
+  namespace: apps
+  annotations:
+    nginx.ingress.kubernetes.io/auth-url: http://user-service.apps.svc.cluster.local:8000/auth
+    nginx.ingress.kubernetes.io/auth-response-headers: userId
+spec:
+  rules:
+    - host: arch.homework
+      http:
+        paths:
+          - path: /user
+            pathType: Prefix
+            backend:
+              service:
+                name: user-service
+                port:
+                  number: 8000
+          - path: /bill
+            pathType: Prefix
+            backend:
+              service:
+                name: billing-service
+                port:
+                  number: 8000
+          - path: /order
+            pathType: Prefix
+            backend:
+              service:
+                name: order-service
+                port:
+                  number: 8000
+          - path: /notifications
+            pathType: Prefix
+            backend:
+              service:
+                name: notification-service
+                port:
+                  number: 8000
